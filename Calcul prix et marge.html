@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur Prix et Marge</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 48%;
+        }
+
+        .calculate {
+            background-color: #dcdcdc;
+            color: black;
+        }
+
+        .reset {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <img src="https://slssgroup.sharepoint.com/sites/packlogossgroup/documents%20partages/logo/s-group/png/noir/large/1-small/sgroup-s.png?web=1" alt="Logo" id="logo">
+
+        <!-- Titre -->
+        <h1>Calculateur Prix et Marge</h1>
+
+        <!-- Champs d'entrée -->
+        <label for="achat">Prix d'achat (€) :</label>
+        <input type="text" id="achat" placeholder="Entrez le prix d'achat">
+
+        <label for="marge">Taux de marge (%) :</label>
+        <input type="text" id="marge" placeholder="Entrez le taux de marge">
+
+        <label for="vente">Prix de vente (€) :</label>
+        <input type="text" id="vente" placeholder="Entrez le prix de vente">
+
+        <!-- Boutons -->
+        <div class="button-group">
+            <button class="calculate" onclick="calculer()">Calculer</button>
+            <button class="reset" onclick="reinitialiser()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <script>
+        function calculer() {
+            // Récupérer les valeurs des champs
+            let prixAchat = document.getElementById('achat').value.replace(',', '.');
+            let tauxMarge = document.getElementById('marge').value.replace(',', '.');
+            let prixVente = document.getElementById('vente').value.replace(',', '.');
+
+            // Convertir en nombres si non vide
+            prixAchat = prixAchat ? parseFloat(prixAchat) : null;
+            tauxMarge = tauxMarge ? parseFloat(tauxMarge) : null;
+            prixVente = prixVente ? parseFloat(prixVente) : null;
+
+            // Calculer la valeur manquante
+            if (prixAchat !== null && tauxMarge !== null && prixVente === null) {
+                prixVente = prixAchat / (1 - (tauxMarge / 100));
+                document.getElementById('vente').value = prixVente.toFixed(2);
+            } else if (prixAchat !== null && prixVente !== null && tauxMarge === null) {
+                tauxMarge = ((prixVente - prixAchat) / prixVente) * 100;
+                document.getElementById('marge').value = tauxMarge.toFixed(2);
+            } else if (tauxMarge !== null && prixVente !== null && prixAchat === null) {
+                prixAchat = prixVente - (prixVente * (tauxMarge / 100));
+                document.getElementById('achat').value = prixAchat.toFixed(2);
+            } else {
+                alert("Veuillez remplir exactement 2 champs.");
+            }
+        }
+
+        function reinitialiser() {
+            // Réinitialiser les champs
+            document.getElementById('achat').value = '';
+            document.getElementById('marge').value = '';
+            document.getElementById('vente').value = '';
+        }
+    </script>
+</body>
+</html>
